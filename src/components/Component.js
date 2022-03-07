@@ -1,4 +1,4 @@
-import fetchData from '../API.js'
+import store from '../Store';
 export default class Component {
   constructor($parent, tag, className) {
     this.$parent = $parent;
@@ -27,7 +27,18 @@ export default class Component {
      this.$.addEventListener(type, value);
    })
   }
-  async fetch(type, param){
-      return await fetchData(type, param);
+  set(context, data){
+    store.set(context, data);
+  }
+  subscribe(context){
+    store.subscribe(context, this);
+  }
+  get(context){
+    return store.get(context);
+  }
+  async tryFetchData(fetchData, param, cb){
+    let data = await fetchData(param);
+    data = cb(data);
+    return data;
   }
 }

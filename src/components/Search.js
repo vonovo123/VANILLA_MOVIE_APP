@@ -1,11 +1,14 @@
 import '~/scss/search.scss'
 import Component from './Component';
+import _uniqBy from 'lodash/uniqBy'
+import api from '../API';
 export default class Home extends Component {
   constructor($parent){
     super($parent, 'div', ['search' ,'container']);
     this.child = [
     ]
     this.data = this.setData();
+    this.set('search-movies', null);
     this.bindEvent();
   }
   onClick = (event) => {
@@ -21,18 +24,46 @@ export default class Home extends Component {
     if(event.target.name === 'title'){
       this.data[event.target.name] = event.target.value
     }
-    console.log(this.data['title'])
   }
   async apply(){
-    const res = await this.fetch('apply',
+    const {title, type, year, number} = this.data;
+    const res = await this.tryFetchData(api.searchMovies,
      {
-       title : this.data.title,
-       type : this.data.type,
-       year : this.data.year,
+       title,
+       type,
+       year,
        page : 1
+     }, ({data}) => {
+       return data
      }
     )
-    console.log(res);
+    const {Search, totalResults} = res;
+    let searchMovies = [...Search];
+    const total = parseInt(totalResults, 10);
+    //한페이지에 보여줄 영화 수
+    const per = 10;
+    const pageLength = Math.ceil(total / per);
+    if(pageLength > 1){
+      for(let page = 2; page < pageLength; page ++){
+        if(page > number / per) break;
+        const res = await this.tryFetchData(api.searchMovies,
+          {
+            title,
+            type,
+            year,
+            page
+          }, ({data}) => {
+            //this.set('search-movies', data);
+            return data
+          }
+         )
+         const {Search} = res;
+         searchMovies = [...searchMovies, ...Search];
+      }
+    }
+    console.log(searchMovies);
+    //console.log(`res`, res)
+    this.set('search-movies', _uniqBy(searchMovies, 'imdbID'));
   }
   render(){
     this.child.forEach(child => child.render);
