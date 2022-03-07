@@ -1,0 +1,13 @@
+@import "~/scss/app";
+.logo {
+  font-family: "Oswald", sans-serif;
+  font-size : 20px;
+  text-decoration: none;
+  color: $black;
+  &:hover {
+     color: $black;
+  }
+  span {
+    color : $primary;
+  }
+}
