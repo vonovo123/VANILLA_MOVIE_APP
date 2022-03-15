@@ -1,0 +1,41 @@
+@import '~/scss/main';
+.container {
+  padding-top: 40px;
+}
+.skeletons{
+  display:flex;
+  .poster {
+    //감소너비 사용안함(가로사이즈 500 유지)ㄴ
+    flex-shrink: 0;
+    width:500px;
+    height: 500px * 3 / 2;
+    margin-right:70px
+  }
+  .specs {
+    //최대한 많은 너비를 사용함
+    flex-grow:1;
+  }
+  .skeleton {
+    border-radius: 10px;
+    background-color: $gray-200;
+    &.title{
+      width:80%;
+      height: 70px;
+    }
+    &.spec{
+      width:60%;
+      height: 30px;
+      margin-top:20px
+    }
+    &.plot{
+      width:100%;
+      height: 250px;
+      margin-top:20px
+    }
+    &.etc{
+      width:50%;
+      height: 50px;
+      margin-top:20px
+    }
+  }
+}

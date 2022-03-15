@@ -2,13 +2,13 @@ import '~/scss/headline.scss'
 import Component from './Component';
 export default class Home extends Component {
   constructor($parent){
-    super($parent, 'div', ['headline', 'container']);
+    super($parent, 'div', {className : ['headline', 'container']});
     this.child = [];
   }
   render(){
     //this.child.forEach(child => child.render);
     this.$.innerHTML = `
-      <h1>
+    <h1>
       <span>OMDb API</span> <br />
       THE OPEN <br />
       MOVIE DATABASE

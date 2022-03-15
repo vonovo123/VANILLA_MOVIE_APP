@@ -4,7 +4,7 @@ import Component from './Component';
 import {routeChange} from '../Router'
 export default class Header extends Component{
   constructor($parent){
-    super($parent, 'header', 'header')
+    super($parent, 'header', {className : ['header']})
     this.bindEvent();
     this.child = [new Logo(this.$)];
     
@@ -30,9 +30,13 @@ export default class Header extends Component{
       Object.entries($navLinks).forEach($navLink => $navLink[1].classList.remove('active'));
       event.target.classList.add('active');
       const href = event.target.dataset.href;
-      console.log(href);
+      // console.log(href);
+      // if(href === 'movie'){
+      //   this.initData('searchMovieWithId', {id : 'tt4520988'},(res) => {
+      //     this.set('search-the-movie', res);
+      //   })
+      // }
       routeChange(href);
-
     }
   }
 }

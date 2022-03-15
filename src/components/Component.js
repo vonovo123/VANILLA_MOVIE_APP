@@ -1,14 +1,20 @@
 import store from '../Store';
+import api from '../API';
 export default class Component {
-  constructor($parent, tag, className) {
+  constructor($parent, tag, attribute) {
     this.$parent = $parent;
     this.$ = document.createElement(tag);
-    if(className){
-      if(Array.isArray(className)){
-        className.forEach(name => this.$.classList.add(name))
-      } else {
-        this.$.classList.add(className)
-      }
+    if(attribute){
+      Object.entries(attribute).forEach(([fieldName, fieldValue]) => {
+        if(fieldName === 'className'){
+          fieldValue.forEach(name => this.$.classList.add(name))
+        } else if(fieldName === 'styles'){
+          Object.entries(fieldValue).forEach(([styleName, styleValue]) => {
+            this.$.style[styleName] = styleValue;
+          })
+          
+        }
+      })
     }
     this.$parent.appendChild(this.$);
     
@@ -34,11 +40,27 @@ export default class Component {
     store.subscribe(context, this);
   }
   get(context){
+    console.log(store);
     return store.get(context);
   }
   async tryFetchData(fetchData, param, cb){
-    let data = await fetchData(param);
-    data = cb(data);
-    return data;
+    try {
+      let data = await fetchData(param);
+      data = cb(data);
+      return data;
+    } catch(error) {
+      throw(error);
+    }
+  }
+  clearNodes(context){
+    return store.clearNodes(context);
+  }
+  async initData(type, param, cb){
+    try {
+      const res = await this.tryFetchData(api[type], param, ({data}) => data)
+      cb(res);
+    }catch(error){
+      console.log(error.message);
+    }
   }
 }

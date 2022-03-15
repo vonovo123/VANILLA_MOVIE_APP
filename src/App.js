@@ -1,4 +1,3 @@
-import '~/scss/app.scss'
 import Header from './components/Header';
 import RouterView from './components/RouterView';
 

@@ -4,11 +4,15 @@ import _uniqBy from 'lodash/uniqBy'
 import api from '../API';
 export default class Home extends Component {
   constructor($parent){
-    super($parent, 'div', ['search' ,'container']);
+    super($parent, 'div', {className : ['search' ,'container']});
     this.child = [
     ]
     this.data = this.setData();
-    this.set('search-movies', null);
+    if(!this.get('search-movies')){
+      this.set('search-movies', null);
+    } else {
+      this.clearNodes('search-movies');
+    }
     this.bindEvent();
   }
   onClick = (event) => {
@@ -26,44 +30,48 @@ export default class Home extends Component {
     }
   }
   async apply(){
-    const {title, type, year, number} = this.data;
-    const res = await this.tryFetchData(api.searchMovies,
-     {
-       title,
-       type,
-       year,
-       page : 1
-     }, ({data}) => {
-       return data
-     }
-    )
-    const {Search, totalResults} = res;
-    let searchMovies = [...Search];
-    const total = parseInt(totalResults, 10);
-    //한페이지에 보여줄 영화 수
-    const per = 10;
-    const pageLength = Math.ceil(total / per);
-    if(pageLength > 1){
-      for(let page = 2; page < pageLength; page ++){
-        if(page > number / per) break;
-        const res = await this.tryFetchData(api.searchMovies,
-          {
-            title,
-            type,
-            year,
-            page
-          }, ({data}) => {
-            //this.set('search-movies', data);
-            return data
-          }
-         )
-         const {Search} = res;
-         searchMovies = [...searchMovies, ...Search];
+    try {
+      const {title, type, year, number} = this.data;
+      const res = await this.tryFetchData(api.searchMovies,
+       {
+         title,
+         type,
+         year,
+         page : 1
+       }, ({data}) => {
+         return data
+       }
+      )
+      const {Search, totalResults} = res;
+      let searchMovies = [...Search];
+      const total = parseInt(totalResults, 10);
+      //한페이지에 보여줄 영화 수
+      const per = 10;
+      const pageLength = Math.ceil(total / per);
+      if(pageLength > 1){
+        for(let page = 2; page < pageLength; page ++){
+          if(page > number / per) break;
+          const res = await this.tryFetchData(api.searchMovies,
+            {
+              title,
+              type,
+              year,
+              page
+            }, ({data}) => {
+              //this.set('search-movies', data);
+              return data
+            }
+           )
+           const {Search} = res;
+           searchMovies = [...searchMovies, ...Search];
+        }
       }
+      this.set('search-movies', _uniqBy(searchMovies, 'imdbID'));
+    } catch (error){
+      const err = new Error(error.message);
+      this.set('search-movies', err)
     }
-    console.log(searchMovies);
-    //console.log(`res`, res)
-    this.set('search-movies', _uniqBy(searchMovies, 'imdbID'));
+   
   }
   render(){
     this.child.forEach(child => child.render);

@@ -4,7 +4,7 @@ const fetchData = async function(url){
     const res = await axios.get(url);
     return res;
     } catch(error){
-      console.log(error)
+      throw(error)
     }
 }
 export default fetchData;

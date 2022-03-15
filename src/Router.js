@@ -2,20 +2,20 @@ import Home from './components/Home';
 import Movie from './components/Movie';
 import About from './components/About';
 
-export const initRoute = function ($app, app){
+export const initRoute = function (app){
   window.addEventListener('ROUTE_CHANGE', () => {
-    route($app, app);  
+    route(app);  
   })
   window.addEventListener('popstate', ()=>{
-    route($app, app);  
+    route(app);  
   })
-  route($app, app);
+  route(app);
 }
-const route = function($app, app){
+const route = function(app){
+  let $app = app.$;
   const {pathname} = window.location;
   let routerView = null
   if($app.firstChild){
-    console.log($app.firstChild)
     $app.removeChild($app.firstChild);
   }
   if(pathname === '/'){
@@ -26,7 +26,6 @@ const route = function($app, app){
     routerView = new About($app);
   }
   Object.entries(app.$parent.childNodes).forEach(([idx,node]) => {
-    console.log(node.tagName);
     if(node.tagName === 'DIV') {
       app.$parent.removeChild(node)
     }
