@@ -30,11 +30,14 @@ const route = function(app){
       app.$parent.removeChild(node)
     }
   });
-  routerView.render();
+  //routerView.render();
   app.render();
 }
 
-export const routeChange = function(url){
+export const routeChange = function(url, param){
+  if(param){
+    url += `\/${param}`;
+  }
   history.pushState(null, null, url);
   window.dispatchEvent(new CustomEvent('ROUTE_CHANGE'));
 }

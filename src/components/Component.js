@@ -19,7 +19,7 @@ export default class Component {
     this.$parent.appendChild(this.$);
     
   }
-  renderTemplate(type){
+  renderTemplate(){
     Object.entries(this.$.childNodes).forEach(([key, node]) => {
       if(node.tagName !== 'TEMPLATE'){
         this.$parent.appendChild(node)

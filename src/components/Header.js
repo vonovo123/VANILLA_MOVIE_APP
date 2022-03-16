@@ -31,12 +31,12 @@ export default class Header extends Component{
       event.target.classList.add('active');
       const href = event.target.dataset.href;
       // console.log(href);
-      // if(href === 'movie'){
-      //   this.initData('searchMovieWithId', {id : 'tt4520988'},(res) => {
-      //     this.set('search-the-movie', res);
-      //   })
-      // }
-      routeChange(href);
+      if(href === 'movie'){
+        routeChange(href, 'tt4520988');
+      } else {
+        routeChange(href);  
+      }
+      
     }
   }
 }

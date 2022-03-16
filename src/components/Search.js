@@ -5,12 +5,11 @@ import api from '../API';
 export default class Home extends Component {
   constructor($parent){
     super($parent, 'div', {className : ['search' ,'container']});
-    this.child = [
-    ]
     this.data = this.setData();
-    if(!this.get('search-movies')){
+    let initData = this.get('search-movies');
+    if(!initData){
       this.set('search-movies', null);
-    } else {
+    } else{
       this.clearNodes('search-movies');
     }
     this.bindEvent();
@@ -74,7 +73,6 @@ export default class Home extends Component {
    
   }
   render(){
-    this.child.forEach(child => child.render);
     const filters = this.data.filters;
     let template = `
       <input

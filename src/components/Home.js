@@ -11,6 +11,7 @@ export default class Home extends Component {
       new Search(this.$),
       new MovieList(this.$)
     ]
+    this.render();
   }
   render(){
     this.child.forEach(child => child.render());
