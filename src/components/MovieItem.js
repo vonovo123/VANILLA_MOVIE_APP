@@ -2,6 +2,8 @@ import Loader from '~/components/Loader';
 import '~/scss/movieItem.scss'
 import Component from './Component'
 import {loadImage} from '~/Plugin.js'
+import {routeChange} from '~/Router.js'
+import { changeActive } from './Header';
 export default class MovieItem extends Component {
   constructor($parent){
     super($parent, 'div', {className : ['movie-item']});
@@ -19,7 +21,11 @@ export default class MovieItem extends Component {
       height:`1.5rem`
      });
     $movie.style.backgroundImage = `url('${this.loadImage($movie, imageLoader, movie.Poster)}')`;
-
+    $movie.addEventListener('click', (event) => {
+      //console.log(movie.imdbID);
+      routeChange('movie', movie.imdbID);
+      changeActive('Movie');
+    })
     const $info = document.createElement('div')
      $info.classList.add('info');
      $info.innerHTML = `

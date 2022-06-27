@@ -1,6 +1,7 @@
 import Home from './components/Home';
 import Movie from './components/Movie';
 import About from './components/About';
+import NotFound from './components/NotFound';
 
 export const initRoute = function (app){
   window.addEventListener('ROUTE_CHANGE', () => {
@@ -24,6 +25,8 @@ const route = function(app){
     routerView = new Movie($app);
   } else if(pathname.indexOf('about') !== -1){
     routerView = new About($app);
+  } else {
+    routerView = new NotFound($app)
   }
   Object.entries(app.$parent.childNodes).forEach(([idx,node]) => {
     if(node.tagName === 'DIV') {
@@ -38,6 +41,7 @@ export const routeChange = function(url, param){
   if(param){
     url += `\/${param}`;
   }
+  console.log(`url: ${url}`)
   history.pushState(null, null, url);
   window.dispatchEvent(new CustomEvent('ROUTE_CHANGE'));
 }

@@ -22,7 +22,14 @@ export default class Component {
   renderTemplate(){
     Object.entries(this.$.childNodes).forEach(([key, node]) => {
       if(node.tagName !== 'TEMPLATE'){
-        this.$parent.appendChild(node)
+        const lastEl = this.$parent.lastElementChild;
+        console.log(lastEl.tagName)
+        if(lastEl.tagName === 'FOOTER'){
+          this.$parent.insertBefore(node, lastEl);
+        } else{
+          this.$parent.appendChild(node)
+        }
+        
       }
     });
   }
