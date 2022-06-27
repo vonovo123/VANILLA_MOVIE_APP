@@ -23,6 +23,7 @@ class Store {
       }
       return;
     }
+    console.log('store data', data);
     this.store[context].data = data;
     this.publish(context);
   }
